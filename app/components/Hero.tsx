@@ -317,7 +317,7 @@ export default function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative flex min-h-screen items-center justify-center overflow-hidden"
+      className="relative flex min-h-svh items-start justify-center overflow-hidden pt-24 pb-12 sm:items-center sm:pt-0 sm:pb-0"
     >
       {/* Off-white background */}
       <div className="absolute inset-0" style={{ background: "#f0ebe4" }} />
@@ -482,7 +482,7 @@ export default function Hero() {
         {/* Tagline */}
         <p
           ref={taglineRef}
-          className="relative mb-4 text-[10px] font-light uppercase tracking-[0.35em] text-[#8a6218] sm:mb-8 sm:text-[12px] sm:tracking-[0.45em]"
+          className="relative mb-2 text-[10px] font-light uppercase tracking-[0.35em] text-[#8a6218] sm:mb-8 sm:text-[12px] sm:tracking-[0.45em]"
         >
           Niche &amp; Luxury Fragrances
         </p>
@@ -492,7 +492,7 @@ export default function Hero() {
           <h1
             ref={brandH1Ref}
             className="relative overflow-hidden font-[family-name:var(--font-nunito)] uppercase tracking-[0.06em] leading-[1.05] brand-painted"
-            style={{ fontSize: "clamp(2.25rem, 8vw, 5.5rem)" }}
+            style={{ fontSize: "clamp(1.85rem, 8vw, 5.5rem)" }}
           >
             <span className="font-light">Poly</span>
             <span className="font-black">snifferous</span>
@@ -511,14 +511,14 @@ export default function Hero() {
         {/* Mr and Mrs Sniff image */}
         <div
           ref={dividerDiamondRef}
-          className="my-2 flex items-center justify-center sm:my-3"
+          className="my-1 flex items-center justify-center sm:my-3"
         >
           <Image
             src="/img/MrandMrsSniffnobg.png"
             alt="Mr and Mrs Sniff"
             width={360}
             height={360}
-            className="h-16 w-auto sm:h-72"
+            className="h-40 w-auto sm:h-72"
             priority
           />
         </div>
@@ -527,7 +527,7 @@ export default function Hero() {
         <p
           ref={subtitleRef}
           className="relative font-[family-name:var(--font-playfair)] italic font-medium text-[#7a5a1a]"
-          style={{ fontSize: "clamp(1.75rem, 5vw, 3.25rem)" }}
+          style={{ fontSize: "clamp(1.4rem, 5vw, 3.25rem)" }}
         >
           is for the People
         </p>
@@ -535,7 +535,7 @@ export default function Hero() {
         {/* Body copy */}
         <p
           ref={bodyRef}
-          className="relative mx-auto mt-5 max-w-md text-[13px] font-light leading-[1.7] text-[#5c5145] sm:mt-8 sm:text-base sm:leading-[1.8]"
+          className="relative mx-auto mt-3 max-w-md text-[12px] font-light leading-[1.7] text-[#5c5145] sm:mt-8 sm:text-base sm:leading-[1.8]"
         >
           Original blends, curated decants, and artisan perfumery
           <br className="hidden sm:block" />
@@ -545,7 +545,7 @@ export default function Hero() {
         {/* CTAs */}
         <div
           ref={ctaRef}
-          className="mt-7 flex flex-col items-center gap-4 sm:mt-10 sm:flex-row sm:justify-center sm:gap-6"
+          className="mt-5 flex flex-col items-center gap-3 sm:mt-10 sm:flex-row sm:justify-center sm:gap-6"
         >
           <a
             href="/collections"
@@ -579,7 +579,7 @@ export default function Hero() {
       {/* Scroll indicator */}
       <div
         ref={scrollIndicatorRef}
-        className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 sm:bottom-8 sm:gap-3"
+        className="absolute bottom-2 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 sm:bottom-8 sm:gap-3"
       >
         <span className="text-[9px] font-light uppercase tracking-[0.4em] text-[#8a6218]/50">
           Scroll
