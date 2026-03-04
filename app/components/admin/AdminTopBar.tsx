@@ -21,7 +21,7 @@ export default function AdminTopBar({ onMenuToggle }: AdminTopBarProps) {
 
   const handleLogout = () => {
     sessionStorage.removeItem("polly-admin-auth");
-    router.push("/admin/login");
+    router.push("/");
   };
 
   return (
@@ -30,7 +30,7 @@ export default function AdminTopBar({ onMenuToggle }: AdminTopBarProps) {
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuToggle}
-          className="rounded-lg p-2 text-[#7a6e62] hover:bg-[#d5cdc2] hover:text-[#3d352c] lg:hidden"
+          className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg text-[#7a6e62] hover:bg-[#d5cdc2] hover:text-[#3d352c] lg:hidden"
           aria-label="Toggle sidebar"
         >
           <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
@@ -50,7 +50,7 @@ export default function AdminTopBar({ onMenuToggle }: AdminTopBarProps) {
         </div>
         <button
           onClick={handleLogout}
-          className="rounded-lg px-3 py-1.5 text-xs font-medium text-[#7a6e62]/60 transition-colors hover:bg-[#8b2e1c]/10 hover:text-[#8b2e1c]"
+          className="rounded-lg px-3 py-2 text-xs font-medium text-[#7a6e62]/60 transition-colors hover:bg-[#8b2e1c]/10 hover:text-[#8b2e1c]"
         >
           Logout
         </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function AdminLogin() {
@@ -99,6 +100,13 @@ export default function AdminLogin() {
         <p className="mt-6 text-center text-[11px] text-[#7a6e62]/40">
           Demo credentials: admin / admin
         </p>
+
+        <Link href="/" className="mt-4 flex items-center justify-center gap-1.5 text-sm text-[#7a6e62]/60 transition-colors hover:text-[#5c5145]">
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+          </svg>
+          Back to Homepage
+        </Link>
       </div>
     </div>
   );

@@ -103,8 +103,8 @@ export default function AnalyticsPage() {
         <h2 className="mb-6 text-sm font-semibold uppercase tracking-wider text-[#3d352c]">Conversion Funnel</h2>
         <div className="space-y-3">
           {funnel.map((f) => (
-            <div key={f.stage} className="flex items-center gap-4">
-              <span className="w-40 shrink-0 text-sm text-[#5c5145]">{f.stage}</span>
+            <div key={f.stage} className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
+              <span className="sm:w-40 sm:shrink-0 text-sm text-[#5c5145]">{f.stage}</span>
               <div className="flex-1">
                 <div className="h-8 overflow-hidden rounded-lg bg-[#d5cdc2]">
                   <div
@@ -123,7 +123,7 @@ export default function AnalyticsPage() {
       {/* Inventory health */}
       <div className="rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8] p-5">
         <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-[#3d352c]">Inventory Health</h2>
-        <div className="grid gap-3 grid-cols-3">
+        <div className="grid gap-3 grid-cols-1 sm:grid-cols-3">
           <div className="rounded-lg bg-[#1e3a4a]/10 p-3 text-center">
             <p className="text-xl font-bold text-[#2a5060]">{products.filter((p) => p.status === "in-stock").length}</p>
             <p className="text-xs text-[#5c5145]">In Stock</p>

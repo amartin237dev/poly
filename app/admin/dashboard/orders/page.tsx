@@ -30,8 +30,8 @@ export default function OrdersPage() {
         ))}
       </div>
 
-      {/* Orders table */}
-      <div className="overflow-x-auto rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8]">
+      {/* Orders table (desktop) */}
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8]">
         <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr className="border-b border-[#c8b898]/40 text-left">
@@ -74,6 +74,39 @@ export default function OrdersPage() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {orders.map((o) => (
+          <div key={o.id} className="rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8] p-4">
+            <div className="flex items-start justify-between gap-2">
+              <span className="font-mono text-xs text-[#8a6218]">{o.id}</span>
+              <span className={`inline-flex shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold capitalize ${statusBadge[o.status]}`}>
+                {o.status}
+              </span>
+            </div>
+            <div className="mt-2">
+              <p className="font-medium text-[#3d352c]">{o.customer}</p>
+              <p className="text-xs text-[#7a6e62]/50">{o.email}</p>
+            </div>
+            <div className="mt-2 flex items-center justify-between text-sm text-[#5c5145]">
+              <span>
+                {o.items[0].name}
+                {o.items.length > 1 && (
+                  <span className="ml-1 text-xs text-[#7a6e62]/50">+{o.items.length - 1} more</span>
+                )}
+              </span>
+              <span className="font-medium text-[#3d352c]">${o.total}</span>
+            </div>
+            <div className="mt-3 flex items-center justify-between">
+              <span className="text-xs text-[#7a6e62]/50">{o.date}</span>
+              <button className="rounded-lg px-3 py-2 text-sm text-[#7a6e62] transition-colors hover:bg-[#d5cdc2] hover:text-[#3d352c]">
+                View
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

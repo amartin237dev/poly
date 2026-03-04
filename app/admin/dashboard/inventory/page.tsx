@@ -50,8 +50,8 @@ export default function InventoryPage() {
         </select>
       </div>
 
-      {/* Table */}
-      <div className="overflow-x-auto rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8]">
+      {/* Table (desktop) */}
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8]">
         <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr className="border-b border-[#c8b898]/40 text-left">
@@ -98,6 +98,39 @@ export default function InventoryPage() {
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {filtered.map((p) => (
+          <div key={p.id} className="rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8] p-4">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <p className="font-medium text-[#3d352c]">{p.name}</p>
+                <p className="font-mono text-xs text-[#7a6e62]">{p.sku}</p>
+              </div>
+              <span className={`inline-flex shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold ${statusBadge[p.status]}`}>
+                {statusLabel[p.status]}
+              </span>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-sm text-[#5c5145]">
+              <span>${p.price}</span>
+              <span>Stock: {p.stock}</span>
+              <span>{p.collection}</span>
+            </div>
+            <div className="mt-3 flex gap-2">
+              <button className="rounded-lg px-3 py-2 text-sm text-[#7a6e62] transition-colors hover:bg-[#d5cdc2] hover:text-[#3d352c]">
+                Edit
+              </button>
+              <button className="rounded-lg px-3 py-2 text-sm text-[#8a6218] transition-colors hover:bg-[#8a6218]/10 hover:text-[#6b4c12]">
+                Restock
+              </button>
+            </div>
+          </div>
+        ))}
+        {filtered.length === 0 && (
+          <p className="py-8 text-center text-sm text-[#7a6e62]/50">No products found.</p>
+        )}
       </div>
 
       <p className="text-xs text-[#7a6e62]/50">

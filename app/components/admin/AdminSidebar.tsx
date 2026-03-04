@@ -113,9 +113,9 @@ export default function AdminSidebar({ open, onClose }: AdminSidebarProps) {
         <div className="border-t border-[#c8b898]/40 p-4">
           <Link
             href="/"
-            className="flex items-center gap-2 text-sm text-[#7a6e62]/60 transition-colors hover:text-[#5c5145]"
+            className="flex items-center gap-2 py-2 text-sm text-[#7a6e62]/60 transition-colors hover:text-[#5c5145]"
           >
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
             </svg>
             Back to Site

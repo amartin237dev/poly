@@ -142,7 +142,7 @@ export default function ReadingsPage() {
                   <button
                     key={label}
                     onClick={() => toggleDay(i)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                    className={`rounded-full px-4 py-2 text-xs font-medium transition-colors ${
                       isActive
                         ? "bg-[#8a6218]/20 text-[#8a6218] border border-[#8a6218]/40"
                         : "bg-[#d5cdc2]/50 text-[#7a6e62]/60 border border-transparent"
@@ -165,7 +165,7 @@ export default function ReadingsPage() {
                   <button
                     key={slot}
                     onClick={() => toggleSlot(slot)}
-                    className={`rounded-full px-3 py-1.5 text-xs font-medium transition-colors ${
+                    className={`rounded-full px-4 py-2 text-xs font-medium transition-colors ${
                       isActive
                         ? "bg-[#8a6218]/20 text-[#8a6218] border border-[#8a6218]/40"
                         : "bg-[#d5cdc2]/50 text-[#7a6e62]/60 border border-transparent"
@@ -181,7 +181,7 @@ export default function ReadingsPage() {
           {/* Blocked dates */}
           <div className="mt-5">
             <p className="text-xs font-medium uppercase tracking-wider text-[#7a6e62] mb-2">Blocked Dates</p>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <input
                 type="date"
                 value={newBlockedDate}
@@ -273,8 +273,8 @@ export default function ReadingsPage() {
         </div>
       </div>
 
-      {/* Bookings table */}
-      <div className="overflow-x-auto rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8]">
+      {/* Bookings table (desktop) */}
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8]">
         <table className="w-full min-w-[700px] text-sm">
           <thead>
             <tr className="border-b border-[#c8b898]/40 text-left">
@@ -320,6 +320,40 @@ export default function ReadingsPage() {
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {bookings.map((b) => (
+          <div key={b.id} className="rounded-xl border border-[#c8b898]/30 bg-[#e8e1d8] p-4">
+            <div className="flex items-start justify-between gap-2">
+              <span className="font-mono text-xs text-[#8a6218]">{b.id}</span>
+              <span className={`inline-flex shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-semibold capitalize ${statusBadge[b.status]}`}>
+                {b.status}
+              </span>
+            </div>
+            <div className="mt-2">
+              <p className="font-medium text-[#3d352c]">{b.clientName}</p>
+              <p className="text-xs text-[#7a6e62]/50">{b.clientEmail}</p>
+            </div>
+            <div className="mt-2 text-sm text-[#5c5145]">
+              <p>{b.readingType}</p>
+              <p className="text-xs text-[#7a6e62]/50">{b.date} &middot; {b.timeSlot}</p>
+            </div>
+            <div className="mt-3">
+              <select
+                value={b.status}
+                onChange={(e) => updateBookingStatus(b.id, e.target.value as ReadingBooking["status"])}
+                className="w-full rounded-lg border border-[#c8b898]/40 bg-[#f5f0e8] px-3 py-2.5 text-sm text-[#3d352c] focus:border-[#8a6218] focus:outline-none"
+              >
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="completed">Completed</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
