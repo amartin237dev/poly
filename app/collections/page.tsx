@@ -469,7 +469,7 @@ export default function CollectionsPage() {
       </nav>
 
       {/* ── Sidebar + Content Split ── */}
-      <div className="mx-auto max-w-7xl lg:flex">
+      <div className="mx-auto lg:flex">
         {/* Desktop Sidebar */}
         <aside className="hidden w-72 shrink-0 lg:block">
           <div className="sticky top-[72px] h-[calc(100vh-72px)] overflow-y-auto py-10 pl-6 pr-4">

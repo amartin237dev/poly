@@ -75,23 +75,23 @@ export default function PerfumeReadings() {
   const isModalOpen = modalStep !== "idle";
 
   return (
-    <section id="readings" className="relative overflow-hidden py-28 lg:py-36">
+    <section id="readings" className="relative overflow-hidden py-4 sm:py-10 lg:py-14">
       {/* Atmospheric background */}
       <div className="absolute inset-0 bg-gradient-to-br from-background via-background-secondary to-background" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_50%,rgba(139,46,28,0.1)_0%,transparent_60%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_60%,rgba(200,146,42,0.06)_0%,transparent_50%)]" />
 
-      <div ref={ref} className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section header */}
-        <div className={`mb-20 text-center reveal ${isInView ? "in-view" : ""}`}>
+      <div ref={ref} className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Mobile-only header (above image) */}
+        <div className={`mb-4 text-center lg:hidden reveal ${isInView ? "in-view" : ""}`}>
           <p className="text-[13px] font-medium uppercase tracking-[0.3em] text-accent">
             A Unique Experience
           </p>
-          <div className="ornament mt-4">
+          <div className="ornament mt-2 sm:mt-3">
             <span className="text-amber-dark text-xs">&#9830;</span>
           </div>
           <h2
-            className="mt-5 font-[family-name:var(--font-playfair)] font-semibold leading-snug text-foreground"
+            className="mt-3 sm:mt-4 font-[family-name:var(--font-playfair)] font-semibold leading-snug text-foreground"
             style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
           >
             Perfume Readings
@@ -100,10 +100,28 @@ export default function PerfumeReadings() {
           </h2>
         </div>
 
-        {/* Split layout */}
-        <div className="grid items-center gap-16 lg:grid-cols-2">
-          {/* Left: editorial content + reading cards */}
-          <div className={`reveal ${isInView ? "in-view" : ""}`} style={{ transitionDelay: "150ms" }}>
+        {/* Two-column layout */}
+        <div className="grid items-start gap-6 sm:gap-12 lg:grid-cols-2 lg:gap-16">
+          {/* Left: header (desktop) + editorial content + reading cards */}
+          <div className={`order-2 lg:order-1 reveal ${isInView ? "in-view" : ""}`} style={{ transitionDelay: "150ms" }}>
+            {/* Desktop-only header (inline with content) */}
+            <div className={`hidden lg:block mb-8 reveal ${isInView ? "in-view" : ""}`}>
+              <p className="text-[13px] font-medium uppercase tracking-[0.3em] text-accent">
+                A Unique Experience
+              </p>
+              <div className="ornament mt-3">
+                <span className="text-amber-dark text-xs">&#9830;</span>
+              </div>
+              <h2
+                className="mt-4 font-[family-name:var(--font-playfair)] font-semibold leading-snug text-foreground"
+                style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+              >
+                Perfume Readings
+                <br />
+                <span className="italic text-amber">with Jamie</span>
+              </h2>
+            </div>
+
             <p className="text-lg leading-relaxed text-foreground-muted">
               Part fragrance expert, part psychology nerd — Jamie guides you
               through a one-on-one scent journey. Forget the department-store
@@ -111,7 +129,7 @@ export default function PerfumeReadings() {
             </p>
 
             {/* Pull quote */}
-            <blockquote className="my-10 border-l border-accent/30 pl-6">
+            <blockquote className="my-8 lg:my-10 border-l border-accent/30 pl-6">
               <p className="font-[family-name:var(--font-playfair)] text-lg italic leading-relaxed text-foreground">
                 &ldquo;I didn&apos;t just find a perfume — I found a part of
                 myself I&apos;d forgotten.&rdquo;
@@ -122,11 +140,11 @@ export default function PerfumeReadings() {
             </blockquote>
 
             {/* Reading type cards */}
-            <div className="mt-12 space-y-6">
+            <div className="mt-6 sm:mt-8 space-y-4 sm:space-y-6">
               {readingTypes.map((type, i) => (
                 <div
                   key={type.id}
-                  className={`rounded-lg border border-amber-dark/30 bg-surface p-6 reveal ${isInView ? "in-view" : ""}`}
+                  className={`rounded-lg border border-amber-dark/30 bg-surface p-4 sm:p-6 reveal ${isInView ? "in-view" : ""}`}
                   style={{ transitionDelay: `${300 + i * 150}ms` }}
                 >
                   <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-accent">
@@ -148,7 +166,7 @@ export default function PerfumeReadings() {
 
                   <button
                     onClick={() => handleBookNow(type)}
-                    className="mt-6 inline-flex h-11 items-center border border-red bg-red/10 px-8 text-[12px] font-semibold uppercase tracking-[0.15em] text-red-light transition-all duration-300 hover:bg-red hover:text-foreground hover:shadow-[0_0_24px_rgba(139,46,28,0.25)]"
+                    className="mt-6 inline-flex h-11 w-full sm:w-auto items-center justify-center border border-red bg-red/10 px-8 text-[12px] font-semibold uppercase tracking-[0.15em] text-red-light transition-all duration-300 hover:bg-red hover:text-foreground hover:shadow-[0_0_24px_rgba(139,46,28,0.25)]"
                   >
                     Book Now
                   </button>
@@ -158,15 +176,15 @@ export default function PerfumeReadings() {
           </div>
 
           {/* Right: framed atmospheric image */}
-          <div className={`relative reveal ${isInView ? "in-view" : ""}`} style={{ transitionDelay: "200ms" }}>
+          <div className={`order-1 lg:order-2 relative mb-[20vh] sm:mb-0 lg:sticky lg:top-24 reveal ${isInView ? "in-view" : ""}`} style={{ transitionDelay: "200ms" }}>
             <div className="gilded-frame overflow-hidden">
-              <div className="relative aspect-[4/5]">
+              <div className="relative">
                 <Image
                   src="/img/Reading.jpg"
                   alt="Perfume Readings with Jamie"
-                  fill
-                  className="object-cover"
-                  style={{ objectPosition: "center 30%" }}
+                  width={800}
+                  height={1000}
+                  className="h-auto w-full lg:max-h-none"
                 />
                 {/* Warm amber overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-background/50 via-amber-dark/10 to-transparent" />
@@ -184,11 +202,11 @@ export default function PerfumeReadings() {
           className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
           onClick={(e) => { if (e.target === e.currentTarget) resetModal(); }}
         >
-          <div className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-xl border border-amber-dark/30 bg-background-secondary p-6 shadow-2xl">
+          <div className="relative w-full max-w-lg max-h-[100dvh] sm:max-h-[90vh] overflow-y-auto rounded-none sm:rounded-xl border-0 sm:border border-amber-dark/30 bg-background-secondary p-5 sm:p-6 shadow-2xl">
             {/* Close button */}
             <button
               onClick={resetModal}
-              className="absolute top-4 right-4 text-foreground-muted hover:text-foreground"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-full text-foreground-muted transition-colors hover:bg-foreground-muted/10 hover:text-foreground"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -207,7 +225,7 @@ export default function PerfumeReadings() {
 
                 <div className="mt-6">
                   <p className="text-xs font-medium uppercase tracking-wider text-accent mb-3">Available Dates</p>
-                  <div className="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto">
                     {availableDates.map((d) => {
                       const isSelected = selectedDate?.toDateString() === d.toDateString();
                       return (
@@ -315,7 +333,7 @@ export default function PerfumeReadings() {
                   </div>
                 </div>
 
-                <div className="mt-6 flex gap-3">
+                <div className="mt-6 flex flex-col-reverse sm:flex-row gap-3">
                   <button
                     onClick={() => setModalStep("select-date")}
                     className="h-11 rounded-lg border border-amber-dark/30 px-6 text-[12px] font-semibold uppercase tracking-[0.1em] text-foreground-muted transition-colors hover:text-foreground"
@@ -358,7 +376,7 @@ export default function PerfumeReadings() {
                   </div>
                 </div>
 
-                <div className="mt-6 flex gap-3 justify-center">
+                <div className="mt-6 flex flex-col-reverse sm:flex-row gap-3 sm:justify-center">
                   <button
                     onClick={() => {
                       resetModal();
