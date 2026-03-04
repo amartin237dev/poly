@@ -1,26 +1,382 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Background tones — deep, moody darks inspired by the painting's shadows */
+  --background: #0f0b08;
+  --background-secondary: #1a1410;
+  --background-tertiary: #241c14;
+
+  /* Foreground / text */
+  --foreground: #e8ddd0;
+  --foreground-muted: #a89880;
+
+  /* Amber / gold — the lion's mane, the brandy glow */
+  --amber: #c8922a;
+  --amber-light: #e0b04a;
+  --amber-dark: #8a6218;
+
+  /* Deep red — the suit, warmth, intensity */
+  --red: #8b2e1c;
+  --red-light: #b04a30;
+  --red-dark: #5c1e12;
+
+  /* Teal / navy — the cool background contrast */
+  --teal: #1e3a4a;
+  --teal-light: #2a5060;
+  --teal-dark: #0f2230;
+
+  /* Accent — warm highlight for interactive elements */
+  --accent: #d4982a;
+  --accent-hover: #e8b04e;
+
+  /* Borders and surfaces */
+  --border: #2e2418;
+  --surface: #1a1410;
+  --surface-hover: #241c14;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-foreground-muted: var(--foreground-muted);
+  --color-amber: var(--amber);
+  --color-amber-light: var(--amber-light);
+  --color-amber-dark: var(--amber-dark);
+  --color-red: var(--red);
+  --color-red-light: var(--red-light);
+  --color-red-dark: var(--red-dark);
+  --color-teal: var(--teal);
+  --color-teal-light: var(--teal-light);
+  --color-teal-dark: var(--teal-dark);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --font-sans: var(--font-poppins);
+  --font-serif: var(--font-playfair);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), Arial, Helvetica, sans-serif;
+}
+
+/* ── Canvas / Linen Texture — oil painting tactile feel ── */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23a89880' fill-opacity='0.6'%3E%3Cpath d='M0 0h1v1H0zM4 0h1v1H4zM8 0h1v1H8zM12 0h1v1h-1zM16 0h1v1h-1zM20 0h1v1h-1zM24 0h1v1h-1zM28 0h1v1h-1zM32 0h1v1h-1zM36 0h1v1h-1zM40 0h1v1h-1zM44 0h1v1h-1zM48 0h1v1h-1zM52 0h1v1h-1zM56 0h1v1h-1zM2 2h1v1H2zM6 2h1v1H6zM10 2h1v1h-1zM14 2h1v1h-1zM18 2h1v1h-1zM22 2h1v1h-1zM26 2h1v1h-1zM30 2h1v1h-1zM34 2h1v1h-1zM38 2h1v1h-1zM42 2h1v1h-1zM46 2h1v1h-1zM50 2h1v1h-1zM54 2h1v1h-1zM58 2h1v1h-1zM0 4h1v1H0zM4 4h1v1H4zM8 4h1v1H8zM12 4h1v1h-1zM16 4h1v1h-1zM20 4h1v1h-1zM24 4h1v1h-1zM28 4h1v1h-1zM32 4h1v1h-1zM36 4h1v1h-1zM40 4h1v1h-1zM44 4h1v1h-1zM48 4h1v1h-1zM52 4h1v1h-1zM56 4h1v1h-1z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* ── Vignette — darkened edges like an old master painting ── */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(15, 11, 8, 0.4) 100%);
+}
+
+/* ── Selection styling ── */
+
+::selection {
+  background: rgba(212, 152, 42, 0.3);
+  color: var(--foreground);
+}
+
+/* ── Scrollbar styling ── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--amber-dark);
+}
+
+/* ── Hero Ambient Keyframes (looping — CSS is ideal) ── */
+
+@keyframes ken-burns-drift {
+  0% { transform: scale(1) translate(0, 0); }
+  50% { transform: scale(1.03) translate(-0.5%, -0.3%); }
+  100% { transform: scale(1) translate(0, 0); }
+}
+
+@keyframes gentle-glow {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.06;
+  }
+}
+
+@keyframes float-mote {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate(12px, -25px) scale(1.3);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(-8px, -40px) scale(0.7);
+    opacity: 0.3;
+  }
+  75% {
+    transform: translate(18px, -18px) scale(1.1);
+    opacity: 0.45;
+  }
+}
+
+/* ── Hero Ambient Utilities (toggled on by GSAP onComplete) ── */
+
+.brand-ambient-drift {
+  animation: ken-burns-drift 25s ease-in-out infinite;
+}
+
+.hero-ambient-glow {
+  animation: gentle-glow 6s ease-in-out infinite;
+}
+
+/* ── General Animation Keyframes ── */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(212, 152, 42, 0.15), 0 0 24px rgba(212, 152, 42, 0.08);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(212, 152, 42, 0.3), 0 0 36px rgba(212, 152, 42, 0.12);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scroll-hint {
+  0%, 100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.7;
+    transform: translateY(8px);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ── Animation Utilities ── */
+
+.animate-fade-up {
+  animation: fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in {
+  animation: fade-in 0.7s ease-out both;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-scroll-hint {
+  animation: scroll-hint 2.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* ── Painted Brand Name — oil painting texture clipped to text ── */
+
+.brand-painted {
+  background-image: url("/img/Amberish-Absolute-Intense.jpg");
+  background-size: 200% auto;
+  background-position: center 38%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.brand-shadow {
+  filter: brightness(1.3) saturate(1.2)
+    drop-shadow(0 1px 2px rgba(40, 25, 5, 0.5))
+    drop-shadow(0 0 8px rgba(200, 146, 42, 0.12));
+}
+
+/* Staggered delays */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+
+/* ── Scroll-triggered reveal ── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Ornamental Flourish ── */
+
+.ornament {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.ornament::before,
+.ornament::after {
+  content: "";
+  height: 1px;
+  width: 48px;
+  background: linear-gradient(90deg, transparent, var(--amber-dark), transparent);
+}
+
+/* ── Gilded Frame — picture-frame border for cards ── */
+
+.gilded-frame {
+  position: relative;
+  border: 1px solid var(--amber-dark);
+  box-shadow:
+    inset 0 0 0 1px rgba(200, 146, 42, 0.08),
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    0 1px 0 rgba(200, 146, 42, 0.1);
+}
+
+.gilded-frame::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid rgba(138, 98, 24, 0.2);
+  pointer-events: none;
+}
+
+/* ── Collection Card Overlays ── */
+
+.overlay-amber::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(200, 146, 42, 0.35);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.overlay-teal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(30, 58, 74, 0.45);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.overlay-teal-light::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(42, 80, 96, 0.4);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.overlay-red::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(139, 46, 28, 0.4);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.overlay-warm::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(168, 152, 128, 0.3);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.overlay-warm-red::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(176, 74, 48, 0.35);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* ── Smooth scrolling ── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Body scroll lock for mobile nav ── */
+body.nav-open {
+  overflow: hidden;
 }
