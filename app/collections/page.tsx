@@ -177,7 +177,7 @@ function FragranceLineSection({
           <div
             className="flex gap-5 transition-transform duration-500 ease-out"
             style={{
-              transform: `translateX(-${activeIndex * (100 / visibleCount)}%)`,
+              transform: `translateX(calc(-${activeIndex} * (${100 / visibleCount}% + ${20 / visibleCount}px)))`,
             }}
           >
             {line.products.map((product, i) => {
