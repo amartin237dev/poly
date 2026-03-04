@@ -63,3 +63,47 @@ export interface ReadingAvailability {
   timeSlots: string[];
   blockedDates: string[];
 }
+
+export interface LoyaltyTier {
+  id: string;
+  name: string;
+  minPoints: number;
+  discount: number;
+  color: string;
+}
+
+export interface LoyaltyMember {
+  id: string;
+  name: string;
+  email: string;
+  tier: "bronze" | "silver" | "gold" | "platinum";
+  points: number;
+  totalSpent: number;
+  joinDate: string;
+  lastActivity: string;
+  status: "active" | "inactive";
+}
+
+export interface PointRedemption {
+  id: string;
+  memberId: string;
+  memberName: string;
+  type: "discount" | "free-product" | "exclusive-access";
+  pointsSpent: number;
+  description: string;
+  date: string;
+}
+
+export interface EmailCampaign {
+  id: string;
+  name: string;
+  subject: string;
+  status: "draft" | "scheduled" | "sent" | "paused";
+  audience: "all-customers" | "new-customers" | "repeat-customers" | "vip";
+  scheduledDate?: string;
+  sentDate?: string;
+  openRate?: number;
+  clickRate?: number;
+  recipientCount: number;
+  body: string;
+}

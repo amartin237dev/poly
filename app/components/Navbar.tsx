@@ -85,6 +85,16 @@ export default function Navbar({ variant = "hero" }: { variant?: "hero" | "dark"
               About
             </a>
           </li>
+          <li className="flex items-center gap-12">
+            <span className={`block h-3 w-px transition-colors duration-700 ${dark ? "bg-amber-dark/20" : "bg-[#8a6218]/25"}`} />
+          </li>
+          <li>
+            <a href="/polycoin" className={`relative py-2 transition-all duration-300 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-px after:w-0 after:bg-gradient-to-r after:from-transparent after:via-accent after:to-transparent after:transition-all after:duration-500 hover:after:w-full ${
+              dark ? "hover:text-foreground" : "hover:text-[#2a1f14]"
+            }`}>
+              Polycoin
+            </a>
+          </li>
         </ul>
 
         {/* Desktop: Cart icon + CTA */}
@@ -207,6 +217,7 @@ export default function Navbar({ variant = "hero" }: { variant?: "hero" | "dark"
                 { href: "/collections", label: "Shop", delay: "delay-100" },
                 { href: "/readings", label: "Perfume Readings", delay: "delay-200" },
                 { href: "/about", label: "About", delay: "delay-300" },
+                { href: "/polycoin", label: "Polycoin", delay: "delay-400" },
               ].map((link) => (
                 <a
                   key={link.href}
@@ -220,7 +231,7 @@ export default function Navbar({ variant = "hero" }: { variant?: "hero" | "dark"
               ))}
               <button
                 onClick={() => { close(); openDrawer(); }}
-                className="group flex items-center justify-between border-b border-amber-dark/15 py-6 text-left font-[family-name:var(--font-playfair)] text-2xl tracking-wide text-foreground/90 transition-colors hover:text-accent animate-fade-up delay-400"
+                className="group flex items-center justify-between border-b border-amber-dark/15 py-6 text-left font-[family-name:var(--font-playfair)] text-2xl tracking-wide text-foreground/90 transition-colors hover:text-accent animate-fade-up delay-500"
               >
                 <span>Cart{cartCount > 0 && <span className="ml-2 text-lg text-accent">({cartCount})</span>}</span>
                 <span className="block h-px w-0 bg-accent/60 transition-all duration-500 group-hover:w-8" />
@@ -237,7 +248,7 @@ export default function Navbar({ variant = "hero" }: { variant?: "hero" | "dark"
               <a
                 href="/readings"
                 onClick={close}
-                className="block w-full border border-accent/40 py-4 text-center text-[11px] font-semibold uppercase tracking-[0.25em] text-accent transition-all duration-300 hover:border-accent hover:bg-accent/5 hover:shadow-[0_0_20px_rgba(212,152,42,0.1)] animate-fade-up delay-500"
+                className="block w-full border border-accent/40 py-4 text-center text-[11px] font-semibold uppercase tracking-[0.25em] text-accent transition-all duration-300 hover:border-accent hover:bg-accent/5 hover:shadow-[0_0_20px_rgba(212,152,42,0.1)] animate-fade-up delay-600"
               >
                 Book a Reading
               </a>

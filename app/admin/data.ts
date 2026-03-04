@@ -1,4 +1,4 @@
-import { Product, Order, Activity, RevenueData, ReadingType, ReadingBooking, ReadingAvailability } from "./types";
+import { Product, Order, Activity, RevenueData, ReadingType, ReadingBooking, ReadingAvailability, EmailCampaign, LoyaltyTier, LoyaltyMember, PointRedemption } from "./types";
 
 export const products: Product[] = [
   // Originals (3)
@@ -358,5 +358,97 @@ export const readingBookings: ReadingBooking[] = [
     status: "cancelled",
     notes: "Scheduling conflict",
     createdAt: "2026-02-28",
+  },
+];
+
+export const loyaltyTiers: LoyaltyTier[] = [
+  { id: "t1", name: "Bronze", minPoints: 0, discount: 5, color: "#8b5e3c" },
+  { id: "t2", name: "Silver", minPoints: 500, discount: 10, color: "#7a6e62" },
+  { id: "t3", name: "Gold", minPoints: 1500, discount: 15, color: "#8a6218" },
+  { id: "t4", name: "Platinum", minPoints: 5000, discount: 25, color: "#2a5060" },
+];
+
+export const loyaltyMembers: LoyaltyMember[] = [
+  { id: "LM-001", name: "Elena Marchetti", email: "elena.m@email.com", tier: "gold", points: 2340, totalSpent: 892, joinDate: "2025-06-15", lastActivity: "2026-03-02", status: "active" },
+  { id: "LM-002", name: "James Whitfield", email: "j.whitfield@email.com", tier: "platinum", points: 6120, totalSpent: 2450, joinDate: "2025-01-10", lastActivity: "2026-03-01", status: "active" },
+  { id: "LM-003", name: "Sofia Reyes", email: "sofia.r@email.com", tier: "silver", points: 780, totalSpent: 345, joinDate: "2025-09-22", lastActivity: "2026-03-01", status: "active" },
+  { id: "LM-004", name: "David Chen", email: "dchen@email.com", tier: "gold", points: 1890, totalSpent: 756, joinDate: "2025-04-18", lastActivity: "2026-02-28", status: "active" },
+  { id: "LM-005", name: "Amara Okafor", email: "amara.o@email.com", tier: "bronze", points: 210, totalSpent: 78, joinDate: "2025-12-01", lastActivity: "2026-02-27", status: "active" },
+  { id: "LM-006", name: "Lucas Petrov", email: "lpetrov@email.com", tier: "silver", points: 540, totalSpent: 412, joinDate: "2025-07-30", lastActivity: "2026-02-25", status: "active" },
+  { id: "LM-007", name: "Isabelle Fontaine", email: "i.fontaine@email.com", tier: "bronze", points: 90, totalSpent: 145, joinDate: "2025-11-05", lastActivity: "2025-12-14", status: "inactive" },
+  { id: "LM-008", name: "Marco Benedetti", email: "marco.b@email.com", tier: "platinum", points: 5430, totalSpent: 1980, joinDate: "2024-11-20", lastActivity: "2026-02-22", status: "active" },
+];
+
+export const pointRedemptions: PointRedemption[] = [
+  { id: "PR-001", memberId: "LM-002", memberName: "James Whitfield", type: "exclusive-access", pointsSpent: 1000, description: "Early access to Perito Moreno Luxury launch", date: "2026-03-01" },
+  { id: "PR-002", memberId: "LM-001", memberName: "Elena Marchetti", type: "discount", pointsSpent: 500, description: "15% off next purchase", date: "2026-02-28" },
+  { id: "PR-003", memberId: "LM-004", memberName: "David Chen", type: "free-product", pointsSpent: 800, description: "Free Patagonia Leather Decant (10ml)", date: "2026-02-25" },
+  { id: "PR-004", memberId: "LM-008", memberName: "Marco Benedetti", type: "exclusive-access", pointsSpent: 1500, description: "Private fragrance consultation with Jamie", date: "2026-02-20" },
+  { id: "PR-005", memberId: "LM-003", memberName: "Sofia Reyes", type: "discount", pointsSpent: 300, description: "10% off Dark Tales collection", date: "2026-02-18" },
+  { id: "PR-006", memberId: "LM-006", memberName: "Lucas Petrov", type: "free-product", pointsSpent: 400, description: "Free Glacial Iris sample set", date: "2026-02-15" },
+];
+
+export const emailCampaigns: EmailCampaign[] = [
+  {
+    id: "EC-001",
+    name: "Spring Collection Launch",
+    subject: "Introducing our Spring 2026 fragrances",
+    status: "sent",
+    audience: "all-customers",
+    sentDate: "2026-02-15",
+    openRate: 42.3,
+    clickRate: 12.8,
+    recipientCount: 1847,
+    body: "Discover the enchanting new scents of our Spring 2026 collection, featuring floral and citrus notes inspired by Mediterranean gardens.",
+  },
+  {
+    id: "EC-002",
+    name: "VIP Exclusive: Perito Moreno Preview",
+    subject: "You're invited — first look at Perito Moreno Luxury",
+    status: "sent",
+    audience: "vip",
+    sentDate: "2026-02-22",
+    openRate: 68.1,
+    clickRate: 31.4,
+    recipientCount: 214,
+    body: "As a valued VIP customer, get exclusive early access to our Perito Moreno Luxury line before it launches to the public.",
+  },
+  {
+    id: "EC-003",
+    name: "March Newsletter",
+    subject: "What's new at Polysnifferous this March",
+    status: "scheduled",
+    audience: "all-customers",
+    scheduledDate: "2026-03-10",
+    recipientCount: 1923,
+    body: "Your monthly roundup of new arrivals, reading availability, and behind-the-scenes stories from the Polysnifferous atelier.",
+  },
+  {
+    id: "EC-004",
+    name: "Win-Back: We Miss You",
+    subject: "It's been a while — here's 15% off your next order",
+    status: "paused",
+    audience: "repeat-customers",
+    scheduledDate: "2026-03-05",
+    recipientCount: 432,
+    body: "We noticed you haven't visited in a while. Come back and enjoy 15% off any full-size fragrance with code MISSYOU15.",
+  },
+  {
+    id: "EC-005",
+    name: "New Customer Welcome Series",
+    subject: "Welcome to the Polysnifferous family",
+    status: "draft",
+    audience: "new-customers",
+    recipientCount: 0,
+    body: "A warm welcome to new subscribers — introduce them to our story, best sellers, and reading sessions.",
+  },
+  {
+    id: "EC-006",
+    name: "Dark Tales Teaser",
+    subject: "Something wicked this way comes...",
+    status: "draft",
+    audience: "all-customers",
+    recipientCount: 0,
+    body: "Build anticipation for the upcoming Dark Tales limited edition release with mysterious imagery and scent descriptions.",
   },
 ];

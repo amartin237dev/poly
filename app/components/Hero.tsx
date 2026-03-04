@@ -155,159 +155,159 @@ export default function Hero() {
         },
       });
 
-      /* ═══ Act 1: The Anticipation (0–0.6s) ═══
+      /* ═══ Act 1: The Anticipation (0–0.4s) ═══
          Golden crack appears at curtain seam, then curtains part immediately. */
 
       tl.to(
         ambientGlowRef.current,
-        { autoAlpha: 0.04, duration: 0.8, ease: "power2.inOut" },
-        0.1
+        { autoAlpha: 0.04, duration: 0.6, ease: "power2.inOut" },
+        0.05
       );
 
       /* Golden crack — vertical core line scales up from center */
       tl.to(
         crackCoreRef.current,
-        { scaleY: 1, autoAlpha: 1, duration: 0.6, ease: "expo.out" },
-        0.2
+        { scaleY: 1, autoAlpha: 1, duration: 0.4, ease: "expo.out" },
+        0.1
       );
 
       /* Golden crack — inner halo blooms outward horizontally */
       tl.to(
         crackInnerRef.current,
-        { autoAlpha: 1, scaleX: 3, duration: 0.5, ease: "power2.out" },
-        0.3
+        { autoAlpha: 1, scaleX: 3, duration: 0.35, ease: "power2.out" },
+        0.18
       );
 
       /* Golden crack — outer halo */
       tl.to(
         crackOuterRef.current,
-        { autoAlpha: 0.6, duration: 0.5, ease: "power2.out" },
-        0.35
+        { autoAlpha: 0.6, duration: 0.35, ease: "power2.out" },
+        0.22
       );
 
-      /* ═══ Act 2: The Reveal (0.6–2.4s) ═══
+      /* ═══ Act 2: The Reveal (0.4–1.6s) ═══
          Curtains part from the golden crack, sliding left and right
          like museum drapes unveiling a masterpiece. */
 
       /* Left curtain slides off to the left */
       tl.to(
         veilLeftRef.current,
-        { x: "-100%", duration: 1.6, ease: "power3.inOut" },
-        0.6
+        { x: "-100%", duration: 1.1, ease: "power3.inOut" },
+        0.4
       );
 
       /* Right curtain slides off to the right */
       tl.to(
         veilRightRef.current,
-        { x: "100%", duration: 1.6, ease: "power3.inOut" },
-        0.6
+        { x: "100%", duration: 1.1, ease: "power3.inOut" },
+        0.4
       );
 
       /* Brand name — scale settles as curtains reveal it (depth perception) */
       tl.to(
         brandWrapRef.current,
-        { scale: 1, duration: 1.6, ease: "expo.out" },
-        0.6
+        { scale: 1, duration: 1.1, ease: "expo.out" },
+        0.4
       );
 
       /* Brand name — focus pull, blur resolves (skip on mobile) */
       if (!isMobile) {
         tl.to(
           brandWrapRef.current,
-          { filter: "blur(0px)", duration: 0.9, ease: "power2.out" },
-          0.7
+          { filter: "blur(0px)", duration: 0.6, ease: "power2.out" },
+          0.5
         );
       }
 
       /* Golden crack — fades out as curtains part (job done) */
       tl.to(
         [crackCoreRef.current, crackInnerRef.current, crackOuterRef.current],
-        { autoAlpha: 0, duration: 0.8, ease: "power2.in" },
-        1.0
+        { autoAlpha: 0, duration: 0.5, ease: "power2.in" },
+        0.7
       );
 
       /* Shimmer sweep — golden glint across revealed brand name */
       tl.to(
         shimmerRef.current,
-        { x: "200%", autoAlpha: 1, duration: 1.2, ease: "power2.inOut" },
-        2.2
+        { x: "200%", autoAlpha: 1, duration: 0.9, ease: "power2.inOut" },
+        1.5
       );
       tl.to(
         shimmerRef.current,
-        { autoAlpha: 0, duration: 0.2 },
-        2.2 + 1.0
+        { autoAlpha: 0, duration: 0.15 },
+        1.5 + 0.75
       );
 
-      /* ═══ Act 3: The Flourish (2.2–3.8s) ═══
+      /* ═══ Act 3: The Flourish (1.5–2.6s) ═══
          Supporting elements cascade in. The gallery comes alive. */
 
       /* Warm bloom behind text */
       tl.to(
         warmBloomRef.current,
-        { autoAlpha: 1, duration: 0.8, ease: "power2.out" },
-        2.2
+        { autoAlpha: 1, duration: 0.6, ease: "power2.out" },
+        1.5
       );
 
       /* Tagline */
       tl.to(
         taglineRef.current,
-        { y: 0, autoAlpha: 1, duration: 0.7, ease: "power3.out" },
-        2.2
+        { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out" },
+        1.5
       );
 
       /* Mr and Mrs Sniff image — scale up with bounce */
       tl.to(
         dividerDiamondRef.current,
-        { scale: 1, autoAlpha: 1, duration: 1.0, ease: "back.out(1.4)" },
-        2.4
+        { scale: 1, autoAlpha: 1, duration: 0.7, ease: "back.out(1.4)" },
+        1.65
       );
 
       /* Subtitle */
       tl.to(
         subtitleRef.current,
-        { y: 0, autoAlpha: 1, duration: 0.7, ease: "power3.out" },
-        2.5
+        { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out" },
+        1.75
       );
 
       /* Corner frames — staggered: TL, TR, BL, BR */
-      const cornerPairDelay = 0.15;
+      const cornerPairDelay = 0.1;
       for (let pair = 0; pair < 4; pair++) {
         const vIdx = pair * 2;
         const hIdx = pair * 2 + 1;
-        const t = 2.6 + pair * cornerPairDelay;
+        const t = 1.8 + pair * cornerPairDelay;
         const vEl = cornersRef.current[vIdx];
         const hEl = cornersRef.current[hIdx];
-        if (vEl) tl.to(vEl, { scaleY: 1, duration: 0.6, ease: "power2.out" }, t);
-        if (hEl) tl.to(hEl, { scaleX: 1, duration: 0.6, ease: "power2.out" }, t);
+        if (vEl) tl.to(vEl, { scaleY: 1, duration: 0.45, ease: "power2.out" }, t);
+        if (hEl) tl.to(hEl, { scaleX: 1, duration: 0.45, ease: "power2.out" }, t);
       }
 
       /* Body copy */
       tl.to(
         bodyRef.current,
-        { y: 0, autoAlpha: 1, duration: 0.7, ease: "power3.out" },
-        2.8
+        { y: 0, autoAlpha: 1, duration: 0.5, ease: "power3.out" },
+        1.95
       );
 
       /* CTA buttons */
       tl.to(
         ctaRef.current,
-        { y: 0, autoAlpha: 1, duration: 0.6, ease: "power3.out" },
-        3.1
+        { y: 0, autoAlpha: 1, duration: 0.45, ease: "power3.out" },
+        2.15
       );
 
-      /* ═══ Act 4: The Settle (3.8s+) ═══
+      /* ═══ Act 4: The Settle (2.6s+) ═══
          Everything at rest. Ambient CSS loops take over. */
 
       tl.to(
         motesContainerRef.current,
-        { autoAlpha: 1, duration: 1.4, ease: "power2.inOut" },
-        3.8
+        { autoAlpha: 1, duration: 1.0, ease: "power2.inOut" },
+        2.6
       );
 
       tl.to(
         scrollIndicatorRef.current,
-        { autoAlpha: 1, y: 0, duration: 0.8, ease: "power2.out" },
-        4.2
+        { autoAlpha: 1, y: 0, duration: 0.6, ease: "power2.out" },
+        2.9
       );
     }, containerRef);
 

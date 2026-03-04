@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useInView } from "../hooks/useInView";
 
-const notes = ["Amber", "Benzoin", "Labdanum", "Vanilla", "Musk", "Sandalwood"];
+const notes = ["Bitter Orange", "Cloves", "Cypress", "Lavender", "Heliotrope", "Benzoin", "Vanilla", "Sandalwood"];
 
 export default function FeaturedProduct() {
   const { ref, isInView } = useInView();
@@ -22,8 +22,8 @@ export default function FeaturedProduct() {
               <div className="gilded-frame overflow-hidden">
                 <div className="relative aspect-[3/4]">
                   <Image
-                    src="/img/Amberish-Absolute-Intense.jpg"
-                    alt="Amberish Absolute Intense"
+                    src="/img/OldManBrackish.webp"
+                    alt="Old Man Brackish"
                     fill
                     className="object-cover"
                     style={{ objectPosition: "center 40%" }}
@@ -51,11 +51,12 @@ export default function FeaturedProduct() {
                 className="mt-6 font-[family-name:var(--font-playfair)] italic font-semibold text-foreground"
                 style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}
               >
-                Amberish Absolute Intense
+                Old Man Brackish
               </h2>
               <p className="mt-6 max-w-lg text-base leading-relaxed text-foreground-muted lg:text-lg">
-                A rich, enveloping amber that unfolds in layers of resinous warmth.
-                Bold yet intimate — our signature statement.
+                A hybrid of Brackish Man and vintage Old Spice — crisp, soapy, and
+                warmly nostalgic. Spicy fougère meets barbershop elegance with cloves,
+                heliotrope, and a smooth benzoin-vanilla dry down.
               </p>
 
               {/* Scent note pills */}
@@ -71,7 +72,7 @@ export default function FeaturedProduct() {
               </div>
 
               <a
-                href="/collections"
+                href="/collections/originals/old-man-brackish"
                 className="mt-10 inline-flex h-13 items-center border border-accent/50 px-10 text-[13px] font-semibold uppercase tracking-[0.15em] text-accent transition-all duration-300 hover:border-accent hover:bg-accent/10 hover:shadow-[0_0_20px_rgba(212,152,42,0.15)] animate-glow-pulse"
               >
                 Discover

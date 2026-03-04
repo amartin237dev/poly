@@ -65,10 +65,31 @@ export default function ProductDetailPage() {
     <div className="min-h-screen bg-background font-[family-name:var(--font-poppins)]">
       <Navbar variant="dark" />
 
+      {/* ── Breadcrumb ── */}
+      <nav className="relative z-10 px-6 pt-[84px] lg:px-16" aria-label="Breadcrumb">
+        <ol className="flex items-center gap-2 text-[11px] uppercase tracking-[0.2em]">
+          <li>
+            <Link href="/collections" className="text-foreground-muted/60 transition-colors hover:text-accent">Collections</Link>
+          </li>
+          <li className="text-foreground-muted/30">/</li>
+          <li>
+            <Link href={`/collections#${collection.id}`} className="text-foreground-muted/60 transition-colors hover:text-accent">{collection.name}</Link>
+          </li>
+          {line && line.name !== product.name && (
+            <>
+              <li className="text-foreground-muted/30">/</li>
+              <li className="text-foreground-muted/60">{line.name}</li>
+            </>
+          )}
+          <li className="text-foreground-muted/30">/</li>
+          <li className="text-foreground/80">{product.name}</li>
+        </ol>
+      </nav>
+
       {/* ── Hero Section ── */}
       <section
         ref={heroView.ref}
-        className="relative overflow-hidden pt-[72px]"
+        className="relative overflow-hidden"
       >
         {/* Background image at low opacity */}
         {product.image && (
@@ -108,17 +129,6 @@ export default function ProductDetailPage() {
 
         {/* Hero content */}
         <div className="relative flex flex-col justify-end px-6 pb-8 pt-8 lg:px-16 lg:pb-12 lg:pt-20">
-          {/* Breadcrumb */}
-          <p
-            className={`reveal text-[11px] font-semibold uppercase tracking-[0.35em] ${heroView.isInView ? "in-view" : ""}`}
-            style={{ color: hex }}
-          >
-            {collection.name}
-            {line && line.name !== product.name && (
-              <span className="text-foreground-muted"> / {line.name}</span>
-            )}
-          </p>
-
           {/* Product name */}
           <h1
             className={`reveal mt-3 font-[family-name:var(--font-playfair)] text-4xl font-semibold text-foreground lg:text-6xl ${heroView.isInView ? "in-view" : ""}`}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
@@ -25,44 +25,73 @@ function FragranceLineSection({
   isFirst: boolean;
 }) {
   const { ref, isInView } = useInView(0.1);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [hasScrolled, setHasScrolled] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(3);
   const productCount = line.products.length;
 
-  const checkScroll = useCallback(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 8);
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 8);
-    // Calculate active card index
-    const cardWidth = el.scrollWidth / productCount;
-    const idx = Math.round(el.scrollLeft / cardWidth);
-    setActiveIndex(Math.min(idx, productCount - 1));
-    if (el.scrollLeft > 8) setHasScrolled(true);
-  }, [productCount]);
-
+  // Calculate how many cards fit in view
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    // Initial check after layout
-    requestAnimationFrame(checkScroll);
-    el.addEventListener("scroll", checkScroll, { passive: true });
-    // Re-check when children resize (e.g. images load)
-    const ro = new ResizeObserver(checkScroll);
-    ro.observe(el);
-    return () => {
-      el.removeEventListener("scroll", checkScroll);
-      ro.disconnect();
+    const measure = () => {
+      const el = containerRef.current;
+      if (!el) return;
+      const w = el.clientWidth;
+      if (w >= 1024) setVisibleCount(3);
+      else if (w >= 640) setVisibleCount(2);
+      else setVisibleCount(1);
     };
-  }, [checkScroll]);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  // Reset index when collection changes
+  useEffect(() => { setActiveIndex(0); }, [line.name]);
+
+  const maxIndex = Math.max(0, productCount - visibleCount);
+  const canScrollLeft = activeIndex > 0;
+  const canScrollRight = activeIndex < maxIndex;
 
   const scroll = (dir: "left" | "right") => {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir === "left" ? -330 : 330, behavior: "smooth" });
+    setActiveIndex((prev) => {
+      if (dir === "left") return Math.max(0, prev - 1);
+      return Math.min(maxIndex, prev + 1);
+    });
+  };
+
+  // Drag / swipe support
+  const dragStart = useRef<{ x: number; t: number } | null>(null);
+  const dragging = useRef(false);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    dragStart.current = { x: e.clientX, t: Date.now() };
+    dragging.current = false;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!dragStart.current) return;
+    if (Math.abs(e.clientX - dragStart.current.x) > 5) dragging.current = true;
+  };
+
+  const onPointerUp = (e: React.PointerEvent) => {
+    if (!dragStart.current) return;
+    const dx = e.clientX - dragStart.current.x;
+    const dt = Date.now() - dragStart.current.t;
+    const threshold = dt < 300 ? 30 : 60;
+    if (Math.abs(dx) > threshold) {
+      scroll(dx < 0 ? "right" : "left");
+    }
+    dragStart.current = null;
+    // Brief delay so the click event on Link children gets suppressed
+    setTimeout(() => { dragging.current = false; }, 10);
+  };
+
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (dragging.current) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
   };
 
   return (
@@ -97,247 +126,223 @@ function FragranceLineSection({
           </div>
         </div>
 
-        {/* Arrow buttons */}
-        <div className="hidden items-center gap-2 sm:flex">
-          <button
-            onClick={() => scroll("left")}
-            className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-200 ${
-              canScrollLeft
-                ? "border-foreground-muted/40 text-foreground hover:border-accent hover:text-accent"
-                : "pointer-events-none border-foreground-muted/10 opacity-30"
-            }`}
-            aria-label="Scroll left"
-          >
-            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={() => scroll("right")}
-            className={`flex h-8 w-8 items-center justify-center rounded-full border transition-all duration-200 ${
-              canScrollRight
-                ? "border-foreground-muted/40 text-foreground hover:border-accent hover:text-accent"
-                : "pointer-events-none border-foreground-muted/10 opacity-30"
-            }`}
-            aria-label="Scroll right"
-          >
-            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
+        {/* Card count */}
+        <span className="text-[11px] text-foreground-muted">
+          {productCount} {productCount === 1 ? "fragrance" : "fragrances"}
+        </span>
       </div>
 
-      {/* Horizontal swipeable product row */}
-      <div className="relative">
-        {/* Left chevron indicator */}
-        <div
-          className={`pointer-events-none absolute left-0 top-0 bottom-4 z-10 flex w-8 items-center justify-start bg-gradient-to-r from-background/80 to-transparent transition-opacity duration-300 ${
-            canScrollLeft ? "opacity-100" : "opacity-0"
+      {/* Product carousel */}
+      <div className="relative" ref={containerRef}>
+        {/* Left arrow */}
+        <button
+          onClick={() => scroll("left")}
+          className={`absolute -left-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border bg-background-secondary/90 backdrop-blur-sm shadow-lg transition-all duration-200 sm:-left-5 sm:h-11 sm:w-11 ${
+            canScrollLeft
+              ? "border-foreground-muted/40 text-foreground hover:border-accent hover:text-accent"
+              : "pointer-events-none border-foreground-muted/10 opacity-0"
           }`}
+          aria-label="Previous products"
         >
-          <svg className="h-5 w-5 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
-        </div>
-        {/* Right chevron indicator */}
-        <div
-          className={`pointer-events-none absolute right-0 top-0 bottom-4 z-10 flex w-8 items-center justify-end bg-gradient-to-l from-background/80 to-transparent transition-opacity duration-300 ${
-            canScrollRight ? "opacity-100" : "opacity-0"
+        </button>
+
+        {/* Right arrow */}
+        <button
+          onClick={() => scroll("right")}
+          className={`absolute -right-3 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full border bg-background-secondary/90 backdrop-blur-sm shadow-lg transition-all duration-200 sm:-right-5 sm:h-11 sm:w-11 ${
+            canScrollRight
+              ? "border-foreground-muted/40 text-foreground hover:border-accent hover:text-accent"
+              : "pointer-events-none border-foreground-muted/10 opacity-0"
           }`}
+          aria-label="Next products"
         >
-          <svg className="h-5 w-5 text-white/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
           </svg>
-        </div>
+        </button>
 
+        {/* Cards container — no overflow, translated via CSS */}
         <div
-          ref={scrollRef}
-          className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory"
-          style={{ scrollbarWidth: "none" }}
+          className="overflow-hidden touch-pan-y select-none"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={onPointerUp}
+          onPointerCancel={onPointerUp}
+          onClickCapture={onClickCapture}
+          style={{ cursor: "grab" }}
         >
-        {line.products.map((product, i) => {
-          const isFlagship = !product.isFlanker;
-          const initial = product.name.charAt(0);
+          <div
+            className="flex gap-5 transition-transform duration-500 ease-out"
+            style={{
+              transform: `translateX(-${activeIndex * (100 / visibleCount)}%)`,
+            }}
+          >
+            {line.products.map((product, i) => {
+              const isFlagship = !product.isFlanker;
+              const initial = product.name.charAt(0);
 
-          return (
-            <Link
-              key={product.name}
-              href={`/collections/${active.id}/${slugify(product.name)}`}
-              className={`reveal group relative flex w-[75vw] max-w-[300px] shrink-0 snap-start flex-col overflow-hidden rounded-lg transition-all duration-500 sm:w-[300px] lg:w-[320px] ${
-                isInView ? "in-view" : ""
-              } ${
-                isFlagship
-                  ? "gilded-frame"
-                  : "border border-border/50 hover:border-border hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
-              }`}
-              style={{ transitionDelay: `${i * 100}ms` }}
-            >
-              {/* Image area */}
-              <div className="relative aspect-[1/1] w-full overflow-hidden bg-background-secondary sm:aspect-[4/5]">
-                {product.image ? (
-                  <>
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                      className="object-contain transition-transform duration-700 group-hover:scale-110 sm:object-cover"
-                    />
-                    {/* Collection-colored overlay */}
-                    <div
-                      className="absolute inset-0 mix-blend-multiply"
-                      style={{ backgroundColor: hex, opacity: 0.08 }}
-                    />
-                  </>
-                ) : (
-                  /* No-image fallback: large initial letter */
-                  <div className="flex h-full items-center justify-center">
-                    <span
-                      className="font-[family-name:var(--font-playfair)] text-[120px] font-bold leading-none"
-                      style={{ color: hex, opacity: 0.18 }}
-                    >
-                      {initial}
-                    </span>
-                  </div>
-                )}
-
-                {/* Gradient fade to bottom */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-
-                {/* Inner frame line on hover */}
-                <div className="absolute inset-3 border border-foreground/0 transition-all duration-500 group-hover:border-foreground/10" />
-
-                {/* Tags floating over image */}
-                <div className="absolute left-3 top-3 flex flex-col gap-1.5">
-                  {product.isFlanker && (
-                    <span className="inline-flex rounded-full border border-amber/30 bg-background/60 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-amber-light backdrop-blur-sm">
-                      Flanker
-                    </span>
-                  )}
-                  {product.tag && (
-                    <span
-                      className={`inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-sm ${
-                        product.tag === "Limited"
-                          ? "border-red-light/40 bg-red-dark/30 text-red-light animate-glow-pulse"
-                          : product.tag === "Coming Soon"
-                            ? "border-teal-light/40 bg-teal-dark/30 text-teal-light"
-                            : "border-foreground-muted/20 bg-background/50 text-foreground-muted"
-                      }`}
-                    >
-                      {product.tag}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {/* Content area — overlaps image */}
-              <div className="relative -mt-10 flex flex-1 flex-col px-4 pb-4 sm:-mt-12 sm:p-5 lg:p-7">
-                {/* Product name */}
-                <h3 className="font-[family-name:var(--font-playfair)] text-lg font-semibold leading-snug text-foreground lg:text-xl">
-                  {product.name}
-                </h3>
-
-                {/* Size label */}
-                <span className="mt-1 text-[11px] uppercase tracking-[0.2em] text-foreground-muted">
-                  {product.size}
-                </span>
-
-                {/* Description */}
-                {product.description && (
-                  <p className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-foreground-muted">
-                    {product.description}
-                  </p>
-                )}
-
-                {/* Spacer */}
-                <div className="flex-1" />
-
-                {/* Price + Add to Cart */}
-                <div className="mt-3 flex items-center justify-between sm:mt-5">
-                  {product.price > 0 ? (
-                    <>
-                      <span
-                        className="font-[family-name:var(--font-playfair)] text-lg font-semibold"
-                        style={{ color: hex }}
-                      >
-                        ${product.price}
-                      </span>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          addToCart({
-                            productName: product.name,
-                            size: product.size,
-                            price: product.price,
-                            collection: active.id,
-                            collectionName: active.name,
-                          });
-                        }}
-                        className="group/btn flex items-center gap-2 border border-foreground-muted/40 px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-foreground transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-[0_0_12px_rgba(212,152,42,0.15)]"
-                      >
-                        Add to Cart
-                        <svg
-                          className="h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-0.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2}
+              return (
+                <Link
+                  key={product.name}
+                  href={`/collections/${active.id}/${slugify(product.name)}`}
+                  className={`reveal group relative flex flex-col overflow-hidden rounded-lg transition-all duration-500 ${
+                    isInView ? "in-view" : ""
+                  } ${
+                    isFlagship
+                      ? "gilded-frame"
+                      : "border border-border/50 hover:border-border hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)]"
+                  }`}
+                  style={{
+                    flex: `0 0 calc(${100 / visibleCount}% - ${(visibleCount - 1) * 20 / visibleCount}px)`,
+                    transitionDelay: `${i * 100}ms`,
+                  }}
+                >
+                  {/* Image area */}
+                  <div className="relative aspect-[1/1] w-full overflow-hidden bg-background-secondary sm:aspect-[4/5]">
+                    {product.image ? (
+                      <>
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                          className="object-contain transition-transform duration-700 group-hover:scale-110 sm:object-cover"
+                        />
+                        {/* Collection-colored overlay */}
+                        <div
+                          className="absolute inset-0 mix-blend-multiply"
+                          style={{ backgroundColor: hex, opacity: 0.08 }}
+                        />
+                      </>
+                    ) : (
+                      /* No-image fallback: large initial letter */
+                      <div className="flex h-full items-center justify-center">
+                        <span
+                          className="font-[family-name:var(--font-playfair)] text-[120px] font-bold leading-none"
+                          style={{ color: hex, opacity: 0.18 }}
                         >
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-                    </>
-                  ) : (
-                    <span className="text-xs text-foreground-muted">In sets only</span>
-                  )}
-                </div>
-              </div>
-            </Link>
-          );
-        })}
+                          {initial}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Gradient fade to bottom */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+
+                    {/* Inner frame line on hover */}
+                    <div className="absolute inset-3 border border-foreground/0 transition-all duration-500 group-hover:border-foreground/10" />
+
+                    {/* Tags floating over image */}
+                    <div className="absolute left-3 top-3 flex flex-col gap-1.5">
+                      {product.isFlanker && (
+                        <span className="inline-flex rounded-full border border-amber/30 bg-background/60 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-amber-light backdrop-blur-sm">
+                          Flanker
+                        </span>
+                      )}
+                      {product.tag && (
+                        <span
+                          className={`inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider backdrop-blur-sm ${
+                            product.tag === "Limited"
+                              ? "border-red-light/40 bg-red-dark/30 text-red-light animate-glow-pulse"
+                              : product.tag === "Coming Soon"
+                                ? "border-teal-light/40 bg-teal-dark/30 text-teal-light"
+                                : "border-foreground-muted/20 bg-background/50 text-foreground-muted"
+                          }`}
+                        >
+                          {product.tag}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Content area — overlaps image */}
+                  <div className="relative -mt-10 flex flex-1 flex-col px-4 pb-4 sm:-mt-12 sm:p-5 lg:p-7">
+                    {/* Product name */}
+                    <h3 className="font-[family-name:var(--font-playfair)] text-lg font-semibold leading-snug text-foreground lg:text-xl">
+                      {product.name}
+                    </h3>
+
+                    {/* Size label */}
+                    <span className="mt-1 text-[11px] uppercase tracking-[0.2em] text-foreground-muted">
+                      {product.size}
+                    </span>
+
+                    {/* Description */}
+                    {product.description && (
+                      <p className="mt-3 line-clamp-2 text-[13px] leading-relaxed text-foreground-muted">
+                        {product.description}
+                      </p>
+                    )}
+
+                    {/* Spacer */}
+                    <div className="flex-1" />
+
+                    {/* Price + Add to Cart */}
+                    <div className="mt-3 flex items-center justify-between sm:mt-5">
+                      {product.price > 0 ? (
+                        <>
+                          <span
+                            className="font-[family-name:var(--font-playfair)] text-lg font-semibold"
+                            style={{ color: hex }}
+                          >
+                            ${product.price}
+                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              addToCart({
+                                productName: product.name,
+                                size: product.size,
+                                price: product.price,
+                                collection: active.id,
+                                collectionName: active.name,
+                              });
+                            }}
+                            className="group/btn flex items-center gap-2 border border-foreground-muted/40 px-4 py-2 text-[10px] font-medium uppercase tracking-wider text-foreground transition-all duration-300 hover:border-accent hover:text-accent hover:shadow-[0_0_12px_rgba(212,152,42,0.15)]"
+                          >
+                            Add to Cart
+                            <svg
+                              className="h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-0.5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth={2}
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                            </svg>
+                          </button>
+                        </>
+                      ) : (
+                        <span className="text-xs text-foreground-muted">In sets only</span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Swipe hint + dot indicators */}
-        {productCount > 1 && (
-          <div className="mt-4 flex flex-col items-center gap-3">
-            {/* Swipe hint — fades out after first scroll */}
-            <div
-              className={`flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-foreground-muted transition-opacity duration-500 sm:hidden ${
-                hasScrolled ? "opacity-0" : "opacity-100"
-              }`}
-            >
-              <svg className="h-3.5 w-3.5 animate-[float_2s_ease-in-out_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7l4-4m0 0l4 4m-4-4v18" transform="rotate(90 12 12)" />
-              </svg>
-              Swipe to explore
-              <svg className="h-3.5 w-3.5 animate-[float_2s_ease-in-out_infinite]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7l4-4m0 0l4 4m-4-4v18" transform="rotate(-90 12 12)" />
-              </svg>
-            </div>
-
-            {/* Dot indicators */}
-            <div className="flex items-center gap-1.5">
-              {line.products.map((_, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    const el = scrollRef.current;
-                    if (!el) return;
-                    const cardWidth = el.scrollWidth / productCount;
-                    el.scrollTo({ left: cardWidth * idx, behavior: "smooth" });
-                  }}
-                  className={`rounded-full transition-all duration-300 ${
-                    idx === activeIndex
-                      ? "h-2 w-5"
-                      : "h-1.5 w-1.5 opacity-40 hover:opacity-70"
-                  }`}
-                  style={{ backgroundColor: idx === activeIndex ? hex : "var(--foreground-muted)" }}
-                  aria-label={`Go to product ${idx + 1}`}
-                />
-              ))}
-            </div>
+        {/* Dot indicators */}
+        {productCount > visibleCount && (
+          <div className="mt-5 flex items-center justify-center gap-1.5">
+            {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveIndex(idx)}
+                className={`rounded-full transition-all duration-300 ${
+                  idx === activeIndex
+                    ? "h-2 w-5"
+                    : "h-1.5 w-1.5 opacity-40 hover:opacity-70"
+                }`}
+                style={{ backgroundColor: idx === activeIndex ? hex : "var(--foreground-muted)" }}
+                aria-label={`Go to page ${idx + 1}`}
+              />
+            ))}
           </div>
         )}
       </div>

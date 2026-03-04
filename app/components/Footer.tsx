@@ -112,13 +112,13 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-16 border-t border-amber-dark/10 pt-8">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-xs uppercase tracking-[0.1em] text-foreground-muted/70">
+            <p className="text-sm uppercase tracking-[0.1em] text-foreground-muted/80">
               &copy; {new Date().getFullYear()} Polysnifferous. All rights reserved.
             </p>
-            <a href="/admin/login" className="text-foreground-muted/50 hover:text-foreground-muted/80 text-[10px] uppercase tracking-[0.15em] transition-colors">
+            <a href="/admin/login" className="text-foreground-muted/60 hover:text-foreground-muted/90 text-xs uppercase tracking-[0.15em] transition-colors">
               Admin
             </a>
-            <p className="font-[family-name:var(--font-playfair)] text-xs italic text-foreground-muted/60">
+            <p className="font-[family-name:var(--font-playfair)] text-sm italic text-foreground-muted/70">
               For the People, Always
             </p>
           </div>
