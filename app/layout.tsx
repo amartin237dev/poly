@@ -27,6 +27,10 @@ export const metadata: Metadata = {
   title: "Polysnifferous — For the People",
   description:
     "Niche & luxury fragrances made accessible. Original blends, curated decants, and artisan perfumery.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 };
 
 export default function RootLayout({
